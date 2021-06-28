@@ -1,11 +1,12 @@
 package com.mas.dictionary.datasource
 
-import com.mas.dictionary.data.DataModel
+import com.mas.dictionary.data.AppState
 import io.reactivex.Observable
 
 // Для локальных данных используется Room
 class DataSourceLocal(private val remoteProvider: RoomDataBaseImplementation = RoomDataBaseImplementation()) :
-    DataSource<List<DataModel>> {
+    DataSource<AppState> {
 
-    override fun getData(word: String): Observable<List<DataModel>> = remoteProvider.getData(word)
+    override fun getData(word: String): Observable<AppState> =
+        remoteProvider.getData(word).map { AppState.Success(it) }
 }

@@ -1,12 +1,10 @@
 package com.mas.dictionary.view.main.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.mas.dictionary.R
 import com.mas.dictionary.data.DataModel
-import kotlinx.android.synthetic.main.activity_main_recyclerview_item.view.*
+import com.mas.dictionary.databinding.ActivityMainRecyclerviewItemBinding
 
 class MainAdapter(
     private var onListItemClickListener: OnListItemClickListener,
@@ -19,12 +17,18 @@ class MainAdapter(
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerItemViewHolder {
-        return RecyclerItemViewHolder(
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.activity_main_recyclerview_item, parent, false) as View
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerItemViewHolder =
+        RecyclerItemViewHolder(
+            ActivityMainRecyclerviewItemBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
         )
-    }
+//    {
+//        return RecyclerItemViewHolder(
+//            LayoutInflater.from(parent.context)
+//                .inflate(R.layout.activity_main_recyclerview_item, parent, false) as View
+//        )
+//    }
 
     override fun onBindViewHolder(holder: RecyclerItemViewHolder, position: Int) {
         holder.bind(data.get(position))
@@ -34,12 +38,13 @@ class MainAdapter(
         return data.size
     }
 
-    inner class RecyclerItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class RecyclerItemViewHolder(private val vb: ActivityMainRecyclerviewItemBinding) :
+        RecyclerView.ViewHolder(vb.root) {
 
-        fun bind(data: DataModel) {
+        fun bind(data: DataModel) = with(vb) {
             if (layoutPosition != RecyclerView.NO_POSITION) {
-                itemView.header_textview_recycler_item.text = data.text
-                itemView.description_textview_recycler_item.text =
+                headerTextviewRecyclerItem.text = data.text
+                descriptionTextviewRecyclerItem.text =
                     data.meanings?.get(0)?.translation?.translation
 
                 itemView.setOnClickListener { openInNewWindow(data) }
