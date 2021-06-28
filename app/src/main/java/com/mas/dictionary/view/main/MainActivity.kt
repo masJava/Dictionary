@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mas.dictionary.R
 import com.mas.dictionary.data.AppState
 import com.mas.dictionary.data.DataModel
+import com.mas.dictionary.databinding.ActivityMainBinding
 import com.mas.dictionary.presenter.Presenter
 import com.mas.dictionary.view.base.BaseActivity
 import com.mas.dictionary.view.base.View
 import com.mas.dictionary.view.main.adapter.MainAdapter
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity<AppState>() {
     private var adapter: MainAdapter? = null // Адаптер для отображения списка
@@ -31,10 +31,15 @@ class MainActivity : BaseActivity<AppState>() {
         return MainPresenterImpl()
     }
 
+    private var vb: ActivityMainBinding? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        search_fab.setOnClickListener {
+        val view = ActivityMainBinding.inflate(layoutInflater).also {
+            vb = it
+        }.root
+        setContentView(view)
+        vb?.searchFab?.setOnClickListener {
             val searchDialogFragment = SearchDialogFragment.newInstance()
             searchDialogFragment.setOnSearchClickListener(object :
                 SearchDialogFragment.OnSearchClickListener {
@@ -58,9 +63,9 @@ class MainActivity : BaseActivity<AppState>() {
                 } else {
                     showViewSuccess()
                     if (adapter == null) {
-                        main_activity_recyclerview.layoutManager =
+                        vb?.mainActivityRecyclerview?.layoutManager =
                             LinearLayoutManager(applicationContext)
-                        main_activity_recyclerview.adapter =
+                        vb?.mainActivityRecyclerview?.adapter =
                             MainAdapter(onListItemClickListener, dataModel)
                     } else {
                         adapter!!.setData(dataModel)
@@ -72,12 +77,12 @@ class MainActivity : BaseActivity<AppState>() {
                 // Задел на будущее, если понадобится отображать прогресс
                 // загрузки
                 if (appState.progress != null) {
-                    progress_bar_horizontal.visibility = VISIBLE
-                    progress_bar_round.visibility = GONE
-                    progress_bar_horizontal.progress = appState.progress
+                    vb?.progressBarHorizontal?.visibility = VISIBLE
+                    vb?.progressBarRound?.visibility = GONE
+                    vb?.progressBarHorizontal?.progress = appState.progress
                 } else {
-                    progress_bar_horizontal.visibility = GONE
-                    progress_bar_round.visibility = VISIBLE
+                    vb?.progressBarHorizontal?.visibility = GONE
+                    vb?.progressBarRound?.visibility = VISIBLE
                 }
             }
             is AppState.Error -> {
@@ -88,28 +93,28 @@ class MainActivity : BaseActivity<AppState>() {
 
     private fun showErrorScreen(error: String?) {
         showViewError()
-        error_textview.text = error ?: getString(R.string.undefined_error)
-        reload_button.setOnClickListener {
+        vb?.errorTextview?.text = error ?: getString(R.string.undefined_error)
+        vb?.reloadButton?.setOnClickListener {
             presenter.getData("hi", true)
         }
     }
 
     private fun showViewSuccess() {
-        success_linear_layout.visibility = VISIBLE
-        loading_frame_layout.visibility = GONE
-        error_linear_layout.visibility = GONE
+        vb?.successLinearLayout?.visibility = VISIBLE
+        vb?.loadingFrameLayout?.visibility = GONE
+        vb?.errorLinearLayout?.visibility = GONE
     }
 
     private fun showViewLoading() {
-        success_linear_layout.visibility = GONE
-        loading_frame_layout.visibility = VISIBLE
-        error_linear_layout.visibility = GONE
+        vb?.successLinearLayout?.visibility = GONE
+        vb?.loadingFrameLayout?.visibility = VISIBLE
+        vb?.errorLinearLayout?.visibility = GONE
     }
 
     private fun showViewError() {
-        success_linear_layout.visibility = GONE
-        loading_frame_layout.visibility = GONE
-        error_linear_layout.visibility = VISIBLE
+        vb?.successLinearLayout?.visibility = GONE
+        vb?.loadingFrameLayout?.visibility = GONE
+        vb?.errorLinearLayout?.visibility = VISIBLE
     }
 
     companion object {
