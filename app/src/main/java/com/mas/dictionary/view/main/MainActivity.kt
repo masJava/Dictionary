@@ -21,8 +21,6 @@ class MainActivity : BaseActivity<AppState>() {
 
     private val observer = Observer<AppState> { renderData(it) }
 
-    private var adapter: MainAdapter? = null
-
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
             override fun onItemClick(data: DataModel) {
@@ -48,24 +46,22 @@ class MainActivity : BaseActivity<AppState>() {
             })
             searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
         }
+        viewModel.viewState.observe(this, observer)
+
     }
 
     override fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Success -> {
                 val dataModel = appState.data
-                if (dataModel == null || dataModel.isEmpty()) {
+                if (dataModel.isNullOrEmpty()) {
                     showErrorScreen(getString(R.string.empty_server_response_on_success))
                 } else {
                     showViewSuccess()
-                    if (adapter == null) {
-                        vb?.mainActivityRecyclerview?.layoutManager =
-                            LinearLayoutManager(applicationContext)
-                        vb?.mainActivityRecyclerview?.adapter =
-                            MainAdapter(onListItemClickListener, dataModel)
-                    } else {
-                        adapter!!.setData(dataModel)
-                    }
+                    vb?.mainActivityRecyclerview?.layoutManager =
+                        LinearLayoutManager(applicationContext)
+                    vb?.mainActivityRecyclerview?.adapter =
+                        MainAdapter(onListItemClickListener, dataModel)
                 }
             }
             is AppState.Loading -> {
