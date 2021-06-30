@@ -4,32 +4,31 @@ import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mas.dictionary.R
 import com.mas.dictionary.data.AppState
 import com.mas.dictionary.data.DataModel
 import com.mas.dictionary.databinding.ActivityMainBinding
-import com.mas.dictionary.presenter.Presenter
 import com.mas.dictionary.view.base.BaseActivity
-import com.mas.dictionary.view.base.View
 import com.mas.dictionary.view.main.adapter.MainAdapter
 
 class MainActivity : BaseActivity<AppState>() {
-    private var adapter: MainAdapter? = null // Адаптер для отображения списка
+    override val viewModel: MainViewModel by lazy {
+        ViewModelProvider.NewInstanceFactory().create(MainViewModel::class.java)
+    }
 
-    // вариантов перевода
-    // Обработка нажатия элемента списка
+    private val observer = Observer<AppState> { renderData(it) }
+
+    private var adapter: MainAdapter? = null
+
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
             override fun onItemClick(data: DataModel) {
                 Toast.makeText(this@MainActivity, data.text, Toast.LENGTH_SHORT).show()
             }
         }
-
-    // Создаём презентер и храним его в базовой Activity
-    override fun createPresenter(): Presenter<AppState, View> {
-        return MainPresenterImpl()
-    }
 
     private var vb: ActivityMainBinding? = null
 
@@ -44,17 +43,14 @@ class MainActivity : BaseActivity<AppState>() {
             searchDialogFragment.setOnSearchClickListener(object :
                 SearchDialogFragment.OnSearchClickListener {
                 override fun onClick(searchWord: String) {
-                    presenter.getData(searchWord, true)
+                    viewModel.getData(searchWord, true).observe(this@MainActivity, observer)
                 }
             })
             searchDialogFragment.show(supportFragmentManager, BOTTOM_SHEET_FRAGMENT_DIALOG_TAG)
         }
     }
 
-    // Переопределяем базовый метод
     override fun renderData(appState: AppState) {
-        // В зависимости от состояния модели данных (загрузка, отображение,
-        // ошибка) отображаем соответствующий экран
         when (appState) {
             is AppState.Success -> {
                 val dataModel = appState.data
@@ -74,8 +70,6 @@ class MainActivity : BaseActivity<AppState>() {
             }
             is AppState.Loading -> {
                 showViewLoading()
-                // Задел на будущее, если понадобится отображать прогресс
-                // загрузки
                 if (appState.progress != null) {
                     vb?.progressBarHorizontal?.visibility = VISIBLE
                     vb?.progressBarRound?.visibility = GONE
@@ -95,7 +89,7 @@ class MainActivity : BaseActivity<AppState>() {
         showViewError()
         vb?.errorTextview?.text = error ?: getString(R.string.undefined_error)
         vb?.reloadButton?.setOnClickListener {
-            presenter.getData("hi", true)
+            viewModel.getData("hi", true).observe(this, observer)
         }
     }
 

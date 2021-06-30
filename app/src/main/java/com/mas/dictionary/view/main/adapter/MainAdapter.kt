@@ -23,12 +23,6 @@ class MainAdapter(
                 LayoutInflater.from(parent.context), parent, false
             )
         )
-//    {
-//        return RecyclerItemViewHolder(
-//            LayoutInflater.from(parent.context)
-//                .inflate(R.layout.activity_main_recyclerview_item, parent, false) as View
-//        )
-//    }
 
     override fun onBindViewHolder(holder: RecyclerItemViewHolder, position: Int) {
         holder.bind(data.get(position))
