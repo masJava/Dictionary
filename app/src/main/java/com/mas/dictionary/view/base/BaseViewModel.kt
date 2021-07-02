@@ -15,7 +15,7 @@ abstract class BaseViewModel<T : AppState>(
 
     val viewState: LiveData<T> = liveDataForViewToObserve
 
-    open fun getData(word: String, isOnline: Boolean): LiveData<T> = liveDataForViewToObserve
+    abstract fun getData(word: String, isOnline: Boolean)
 
     override fun onCleared() {
         compositeDisposable.clear()
