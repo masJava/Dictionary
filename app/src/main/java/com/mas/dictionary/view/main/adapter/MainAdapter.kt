@@ -6,11 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mas.dictionary.data.DataModel
 import com.mas.dictionary.databinding.ActivityMainRecyclerviewItemBinding
 
-class MainAdapter(
-    private var onListItemClickListener: OnListItemClickListener,
-    private var data: List<DataModel>
-) :
+class MainAdapter(private var onListItemClickListener: OnListItemClickListener) :
     RecyclerView.Adapter<MainAdapter.RecyclerItemViewHolder>() {
+
+    private var data: List<DataModel> = arrayListOf()
 
     fun setData(data: List<DataModel>) {
         this.data = data
@@ -23,12 +22,6 @@ class MainAdapter(
                 LayoutInflater.from(parent.context), parent, false
             )
         )
-//    {
-//        return RecyclerItemViewHolder(
-//            LayoutInflater.from(parent.context)
-//                .inflate(R.layout.activity_main_recyclerview_item, parent, false) as View
-//        )
-//    }
 
     override fun onBindViewHolder(holder: RecyclerItemViewHolder, position: Int) {
         holder.bind(data.get(position))

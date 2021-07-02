@@ -13,10 +13,6 @@ import com.mas.dictionary.databinding.SearchDialogBinding
 
 class SearchDialogFragment : BottomSheetDialogFragment() {
 
-//    private lateinit var searchEditText: TextInputEditText
-//    private lateinit var clearTextImageView: ImageView
-//    private lateinit var searchButton: TextView
-
     private var onSearchClickListener: OnSearchClickListener? = null
     private var vb: SearchDialogBinding? = null
 
@@ -53,7 +49,7 @@ class SearchDialogFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return SearchDialogBinding.inflate(inflater, container, false)
             .also<@NonNull SearchDialogBinding> {
                 vb = it
@@ -63,10 +59,6 @@ class SearchDialogFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        searchEditText = vb?.searchEditText?
-//        clearTextImageView = clear_text_imageview
-//        searchButton = search_button_textview
-
         vb?.searchButtonTextview?.setOnClickListener(onSearchButtonClickListener)
         vb?.searchEditText?.addTextChangedListener(textWatcher)
         addOnClearClickListener()
@@ -85,7 +77,6 @@ class SearchDialogFragment : BottomSheetDialogFragment() {
     }
 
     interface OnSearchClickListener {
-
         fun onClick(searchWord: String)
     }
 
