@@ -1,11 +1,10 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-kapt'
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 29
 
     buildFeatures {
         viewBinding true
@@ -13,8 +12,8 @@ android {
 
     defaultConfig {
         applicationId "com.mas.dictionary"
-        minSdkVersion 19
-        targetSdkVersion 30
+        minSdkVersion 21
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 
@@ -39,29 +38,36 @@ android {
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.1'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    //AndroidX
+    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
+    implementation 'com.android.support:multidex:1.0.3'
 
-    // Rx-Java
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
+    //Design
+    //You should not use the com.android.support and com.google.android.material dependencies in your app at the same time
+    implementation 'com.google.android.material:material:1.0.0'
 
-    // Retrofit 2
+    //Kotlin
+    implementation 'androidx.core:core-ktx:1.0.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1'
+
+    //Rx-Java
+//    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+//    implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
+
+    //Retrofit 2
     implementation 'com.squareup.retrofit2:retrofit:2.6.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
-    implementation 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
+    implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
 
-    //Dagger
-    implementation 'com.google.dagger:dagger-android:2.17'
-    implementation 'com.google.dagger:dagger-android-support:2.17'
-    kapt 'com.google.dagger:dagger-android-processor:2.17'
-    kapt 'com.google.dagger:dagger-compiler:2.17'
+    //Koin for Android
+    implementation 'org.koin:koin-android:2.0.1'
+    implementation 'org.koin:koin-android-viewmodel:2.0.1'
 
-
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    //Test
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
