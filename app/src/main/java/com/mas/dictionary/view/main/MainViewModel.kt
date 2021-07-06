@@ -3,34 +3,37 @@ package com.mas.dictionary.view.main
 import androidx.lifecycle.LiveData
 import com.mas.dictionary.data.AppState
 import com.mas.dictionary.utils.parseSearchResults
-import com.mas.dictionary.view.base.BaseViewModel
-import javax.inject.Inject
+import com.mas.dictionary.viewmodel.BaseViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class MainViewModel @Inject constructor(private val interactor: MainInteractor) :
+class MainViewModel(private val interactor: MainInteractor) :
     BaseViewModel<AppState>() {
 
-    private var appState: AppState? = null
+    private val liveDataForViewToObserve: LiveData<AppState> = mutableLiveData
 
     fun subscribe(): LiveData<AppState> {
         return liveDataForViewToObserve
     }
 
     override fun getData(word: String, isOnline: Boolean) {
-        compositeDisposable.add(
-            interactor.getData(word, isOnline)
-                .subscribeOn(schedulerProvider.io())
-                .observeOn(schedulerProvider.ui())
-                .doOnSubscribe {
-                    liveDataForViewToObserve.value = AppState.Loading(null)
-                }
-                .subscribe(
-                    {
-                        appState = parseSearchResults(it)
-                        liveDataForViewToObserve.value = appState
-                    }, {
-                        liveDataForViewToObserve.value = AppState.Error(it)
-                    }
-                )
-        )
+        mutableLiveData.value = AppState.Loading(null)
+        cancelJob()
+        viewModelCoroutineScope.launch { startInteractor(word, isOnline) }
+    }
+
+    private suspend fun startInteractor(word: String, online: Boolean) =
+        withContext(Dispatchers.IO) {
+            mutableLiveData.postValue(parseSearchResults(interactor.getData(word, online)))
+        }
+
+    override fun handleError(error: Throwable) {
+        mutableLiveData.postValue(AppState.Error(error))
+    }
+
+    override fun onCleared() {
+        mutableLiveData.postValue(AppState.Success(null))
+        super.onCleared()
     }
 }

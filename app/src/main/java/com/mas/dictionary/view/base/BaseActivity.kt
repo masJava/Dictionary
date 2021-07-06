@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.mas.dictionary.data.AppState
 import com.mas.dictionary.utils.network.isOnline
 import com.mas.dictionary.utils.ui.AlertDialogFragment
+import com.mas.dictionary.viewmodel.BaseViewModel
+import com.mas.dictionary.viewmodel.Interactor
 
 abstract class BaseActivity<T : AppState, I : Interactor<T>> : AppCompatActivity() {
 

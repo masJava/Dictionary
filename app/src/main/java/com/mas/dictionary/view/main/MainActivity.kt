@@ -6,7 +6,6 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mas.dictionary.R
 import com.mas.dictionary.data.AppState
@@ -15,13 +14,9 @@ import com.mas.dictionary.databinding.ActivityMainBinding
 import com.mas.dictionary.utils.network.isOnline
 import com.mas.dictionary.view.base.BaseActivity
 import com.mas.dictionary.view.main.adapter.MainAdapter
-import dagger.android.AndroidInjection
-import javax.inject.Inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<AppState, MainInteractor>() {
-
-    @Inject
-    internal lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override lateinit var model: MainViewModel
     private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) }
@@ -52,15 +47,14 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     private var vb: ActivityMainBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
-
         super.onCreate(savedInstanceState)
         val view = ActivityMainBinding.inflate(layoutInflater).also {
             vb = it
         }.root
         setContentView(view)
 
-        model = viewModelFactory.create(MainViewModel::class.java)
+        val viewModel: MainViewModel by viewModel()
+        model = viewModel
         model.subscribe().observe(this@MainActivity, Observer<AppState> { renderData(it) })
 
         vb?.searchFab?.setOnClickListener(fabClickListener)
