@@ -2,7 +2,7 @@ package com.mas.dictionary.view.main
 
 import androidx.lifecycle.LiveData
 import com.mas.dictionary.data.AppState
-import com.mas.dictionary.utils.parseSearchResults
+import com.mas.dictionary.utils.parseOnlineSearchResults
 import com.mas.dictionary.viewmodel.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,7 +25,7 @@ class MainViewModel(private val interactor: MainInteractor) :
 
     private suspend fun startInteractor(word: String, online: Boolean) =
         withContext(Dispatchers.IO) {
-            mutableLiveData.postValue(parseSearchResults(interactor.getData(word, online)))
+            mutableLiveData.postValue(parseOnlineSearchResults(interactor.getData(word, online)))
         }
 
     override fun handleError(error: Throwable) {
