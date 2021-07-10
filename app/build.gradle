@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -64,6 +65,15 @@ dependencies {
     //Koin for Android
     implementation 'org.koin:koin-android:2.0.1'
     implementation 'org.koin:koin-android-viewmodel:2.0.1'
+
+    //Picasso
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+
+    //Room
+    implementation 'androidx.room:room-runtime:2.2.0-alpha01'
+    kapt 'androidx.room:room-compiler:2.2.0-alpha01'
+    implementation 'androidx.room:room-ktx:2.2.0-alpha01'
 
     //Test
     testImplementation 'junit:junit:4.12'
