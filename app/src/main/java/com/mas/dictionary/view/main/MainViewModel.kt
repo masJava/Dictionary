@@ -1,9 +1,9 @@
 package com.mas.dictionary.view.main
 
 import androidx.lifecycle.LiveData
-import com.mas.dictionary.data.AppState
+import com.mas.core.viewmodel.BaseViewModel
 import com.mas.dictionary.utils.parseOnlineSearchResults
-import com.mas.dictionary.viewmodel.BaseViewModel
+import com.mas.model.AppState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -20,7 +20,7 @@ class MainViewModel(private val interactor: MainInteractor) :
     override fun getData(word: String, isOnline: Boolean) {
         mutableLiveData.value = AppState.Loading(null)
         cancelJob()
-        viewModelCoroutineScope.launch { startInteractor(word, isOnline) }
+        viewModelCoroutineScope.launch { this@MainViewModel.startInteractor(word, isOnline) }
     }
 
     private suspend fun startInteractor(word: String, online: Boolean) =

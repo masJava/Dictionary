@@ -1,18 +1,18 @@
 package com.mas.dictionary.di
 
 import androidx.room.Room
-import com.mas.dictionary.data.DataModel
-import com.mas.dictionary.datasource.RetrofitImplementation
-import com.mas.dictionary.datasource.RoomDataBaseImplementation
-import com.mas.dictionary.repository.Repository
-import com.mas.dictionary.repository.RepositoryImplementation
-import com.mas.dictionary.repository.RepositoryImplementationLocal
-import com.mas.dictionary.repository.RepositoryLocal
-import com.mas.dictionary.room.HistoryDataBase
 import com.mas.dictionary.view.history.HistoryInteractor
 import com.mas.dictionary.view.history.HistoryViewModel
 import com.mas.dictionary.view.main.MainInteractor
 import com.mas.dictionary.view.main.MainViewModel
+import com.mas.model.DataModel
+import com.mas.repository.Repository
+import com.mas.repository.RepositoryImplementation
+import com.mas.repository.RepositoryImplementationLocal
+import com.mas.repository.RepositoryLocal
+import com.mas.repository.datasource.RetrofitImplementation
+import com.mas.repository.datasource.RoomDataBaseImplementation
+import com.mas.repository.room.HistoryDataBase
 import org.koin.dsl.module
 
 

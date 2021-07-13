@@ -1,0 +1,14 @@
+<resources>
+
+    <style name="BaseTextStyle" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/color_text_main</item>
+        <item name="android:textSize">@dimen/text_size_standard</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="HeaderTextStyle" parent="BaseTextStyle">
+        <item name="android:textColor">@color/color_text_header</item>
+        <item name="android:textSize">@dimen/text_size_standard_header</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

@@ -1,10 +1,10 @@
 package com.mas.dictionary.view.main
 
-import com.mas.dictionary.data.AppState
-import com.mas.dictionary.data.DataModel
-import com.mas.dictionary.repository.Repository
-import com.mas.dictionary.repository.RepositoryLocal
-import com.mas.dictionary.viewmodel.Interactor
+import com.mas.core.viewmodel.Interactor
+import com.mas.model.AppState
+import com.mas.model.DataModel
+import com.mas.repository.Repository
+import com.mas.repository.RepositoryLocal
 
 class MainInteractor(
     private val repositoryRemote: Repository<List<DataModel>>,

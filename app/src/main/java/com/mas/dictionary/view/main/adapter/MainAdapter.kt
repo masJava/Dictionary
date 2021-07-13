@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.mas.dictionary.R
-import com.mas.dictionary.data.DataModel
 import com.mas.dictionary.databinding.ActivityMainRecyclerviewItemBinding
+import com.mas.model.DataModel
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 
