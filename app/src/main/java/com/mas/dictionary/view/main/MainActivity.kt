@@ -7,16 +7,16 @@ import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mas.core.BaseActivity
 import com.mas.dictionary.R
-import com.mas.dictionary.data.AppState
-import com.mas.dictionary.data.DataModel
 import com.mas.dictionary.databinding.ActivityMainBinding
 import com.mas.dictionary.utils.convertMeaningsToString
-import com.mas.dictionary.utils.network.isOnline
-import com.mas.dictionary.view.base.BaseActivity
 import com.mas.dictionary.view.descriptionscreen.DescriptionActivity
 import com.mas.dictionary.view.history.HistoryActivity
 import com.mas.dictionary.view.main.adapter.MainAdapter
+import com.mas.model.AppState
+import com.mas.model.DataModel
+import com.mas.utils.network.isOnline
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<AppState, MainInteractor>() {
@@ -38,7 +38,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
                         this@MainActivity,
                         data.text!!,
                         convertMeaningsToString(data.meanings!!),
-                        data.meanings[0].imageUrl
+                        data.meanings!![0].imageUrl
                     )
                 )
             }
@@ -67,7 +67,8 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
         val viewModel: MainViewModel by viewModel()
         model = viewModel
-        model.subscribe().observe(this@MainActivity, Observer<AppState> { renderData(it) })
+        model.subscribe()
+            .observe(this@MainActivity, Observer<AppState> { renderData(it) })
 
         vb?.searchFab?.setOnClickListener(fabClickListener)
         vb?.mainActivityRecyclerview?.layoutManager = LinearLayoutManager(applicationContext)

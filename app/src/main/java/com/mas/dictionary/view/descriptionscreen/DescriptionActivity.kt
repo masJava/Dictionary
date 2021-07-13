@@ -8,8 +8,8 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.mas.dictionary.R
 import com.mas.dictionary.databinding.ActivityDescriptionBinding
-import com.mas.dictionary.utils.network.isOnline
-import com.mas.dictionary.utils.ui.AlertDialogFragment
+import com.mas.utils.network.isOnline
+import com.mas.utils.ui.AlertDialogFragment
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 
