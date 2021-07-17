@@ -1,8 +1,6 @@
 package com.mas.dictionary.di
 
 import androidx.room.Room
-import com.mas.dictionary.view.history.HistoryInteractor
-import com.mas.dictionary.view.history.HistoryViewModel
 import com.mas.dictionary.view.main.MainInteractor
 import com.mas.dictionary.view.main.MainViewModel
 import com.mas.model.DataModel
@@ -13,8 +11,16 @@ import com.mas.repository.RepositoryLocal
 import com.mas.repository.datasource.RetrofitImplementation
 import com.mas.repository.datasource.RoomDataBaseImplementation
 import com.mas.repository.room.HistoryDataBase
+import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 
+
+
+fun injectDependencies() = loadModules
+
+private val loadModules by lazy {
+    loadKoinModules(listOf(application, mainScreen))
+}
 
 val application = module {
     single { Room.databaseBuilder(get(), HistoryDataBase::class.java, "HistoryDB").build() }
@@ -30,7 +36,3 @@ val mainScreen = module {
     factory { MainInteractor(get(), get()) }
 }
 
-val historyScreen = module {
-    factory { HistoryViewModel(get()) }
-    factory { HistoryInteractor(get(), get()) }
-}
