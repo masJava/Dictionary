@@ -1,4 +1,4 @@
-package com.mas.dictionary.view.history
+package com.mas.historyscreen
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +13,7 @@ import com.mas.core.viewmodel.Interactor
 import com.mas.dictionary.utils.parseLocalSearchResults
 import com.mas.historyscreen.databinding.ActivityHistoryBinding
 import com.mas.historyscreen.databinding.ActivityHistoryRecyclerviewItemBinding
+import com.mas.historyscreen.injectDependencies
 import com.mas.model.AppState
 import com.mas.model.DataModel
 import com.mas.repository.Repository
@@ -50,6 +51,7 @@ class HistoryActivity : BaseActivity<AppState, HistoryInteractor>() {
         if (vb?.historyActivityRecyclerview?.adapter != null) {
             throw IllegalStateException("The ViewModel should be initialised first")
         }
+        injectDependencies()
         val viewModel: HistoryViewModel by viewModel()
         model = viewModel
         model.subscribe()
