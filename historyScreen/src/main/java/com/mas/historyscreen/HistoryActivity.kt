@@ -13,7 +13,6 @@ import com.mas.core.viewmodel.Interactor
 import com.mas.dictionary.utils.parseLocalSearchResults
 import com.mas.historyscreen.databinding.ActivityHistoryBinding
 import com.mas.historyscreen.databinding.ActivityHistoryRecyclerviewItemBinding
-import com.mas.historyscreen.injectDependencies
 import com.mas.model.AppState
 import com.mas.model.DataModel
 import com.mas.repository.Repository

@@ -1,39 +1,56 @@
 package com.mas.core
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.mas.core.databinding.LoadingLayoutBinding
 import com.mas.core.viewmodel.BaseViewModel
 import com.mas.core.viewmodel.Interactor
 import com.mas.model.AppState
 import com.mas.model.DataModel
-import com.mas.utils.network.isOnline
+import com.mas.utils.network.OnlineLiveData
 import com.mas.utils.ui.AlertDialogFragment
 
 abstract class BaseActivity<T : AppState, I : Interactor<T>> : AppCompatActivity() {
 
-    abstract val model: BaseViewModel<T>
+    protected abstract val model: BaseViewModel<T>
 
-    protected var isNetworkAvailable: Boolean = false
+
+    protected var isNetworkAvailable: Boolean = true
     private var vb: LoadingLayoutBinding? = null
 
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
-        isNetworkAvailable = isOnline(applicationContext)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         val view = LoadingLayoutBinding.inflate(layoutInflater).also {
             vb = it
         }.root
+        setContentView(view)
+        subscribeToNetworkChange()
     }
 
     override fun onResume() {
         super.onResume()
-        isNetworkAvailable = isOnline(applicationContext)
         if (!isNetworkAvailable && isDialogNull()) {
             showNoInternetConnectionDialog()
         }
+    }
+
+    private fun subscribeToNetworkChange() {
+        OnlineLiveData(this).observe(
+            this@BaseActivity,
+            Observer<Boolean> {
+                isNetworkAvailable = it
+                if (!isNetworkAvailable) {
+                    Toast.makeText(
+                        this@BaseActivity,
+                        R.string.dialog_message_device_is_offline,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
     }
 
     protected fun showNoInternetConnectionDialog() {

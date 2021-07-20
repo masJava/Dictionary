@@ -27,8 +27,7 @@ import com.mas.dictionary.view.descriptionscreen.DescriptionActivity
 import com.mas.dictionary.view.main.adapter.MainAdapter
 import com.mas.model.AppState
 import com.mas.model.DataModel
-import com.mas.utils.network.isOnline
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.scope.currentScope
 
 private const val HISTORY_ACTIVITY_PATH = "com.mas.historyscreen.HistoryActivity"
 private const val HISTORY_ACTIVITY_FEATURE_NAME = "historyScreen"
@@ -38,7 +37,7 @@ private const val REQUEST_CODE = 42
 class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
     override lateinit var model: MainViewModel
-    private lateinit var splitInstallManager :SplitInstallManager
+    private lateinit var splitInstallManager: SplitInstallManager
     private lateinit var appUpdateManager: AppUpdateManager
 
     private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener, baseContext) }
@@ -66,7 +65,6 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     private val onSearchClickListener: SearchDialogFragment.OnSearchClickListener =
         object : SearchDialogFragment.OnSearchClickListener {
             override fun onClick(searchWord: String) {
-                isNetworkAvailable = isOnline(applicationContext)
                 if (isNetworkAvailable) {
                     model.getData(searchWord, isNetworkAvailable)
                 } else {
@@ -93,7 +91,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         }.root
         setContentView(view)
         injectDependencies()
-        val viewModel: MainViewModel by viewModel()
+        val viewModel: MainViewModel by currentScope.inject()
         model = viewModel
         model.subscribe()
             .observe(this@MainActivity, Observer<AppState> { renderData(it) })

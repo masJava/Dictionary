@@ -20,7 +20,7 @@ class MainViewModel(private val interactor: MainInteractor) :
     override fun getData(word: String, isOnline: Boolean) {
         mutableLiveData.value = AppState.Loading(null)
         cancelJob()
-        viewModelCoroutineScope.launch { this@MainViewModel.startInteractor(word, isOnline) }
+        viewModelCoroutineScope.launch { startInteractor(word, isOnline) }
     }
 
     private suspend fun startInteractor(word: String, online: Boolean) =
