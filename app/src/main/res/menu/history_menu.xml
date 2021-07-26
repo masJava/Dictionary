@@ -6,4 +6,17 @@
         android:title="@string/history_menu_title"
         android:icon="@drawable/ic_baseline_history_24"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_screen_settings"
+        android:title="@string/menu_title_settings"
+        android:icon="@drawable/ic_baseline_settings_24"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/dark_theme"
+        android:title="@string/dark_theme"
+        android:icon="@drawable/ic_baseline_nights_stay_24"
+        app:showAsAction="always"/>
+
 </menu>

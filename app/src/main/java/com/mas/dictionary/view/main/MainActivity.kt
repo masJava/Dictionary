@@ -1,11 +1,15 @@
 package com.mas.dictionary.view.main
 
+import android.app.AlertDialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -83,10 +87,11 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         }
 
     private var vb: ActivityMainBinding? = null
+    private lateinit var view: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val view = ActivityMainBinding.inflate(layoutInflater).also {
+        view = ActivityMainBinding.inflate(layoutInflater).also {
             vb = it
         }.root
         setContentView(view)
@@ -95,6 +100,7 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         model = viewModel
         model.subscribe()
             .observe(this@MainActivity, Observer<AppState> { renderData(it) })
+
 
         vb?.searchFab?.setOnClickListener(fabClickListener)
         vb?.mainActivityRecyclerview?.layoutManager = LinearLayoutManager(applicationContext)
@@ -153,6 +159,9 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.history_menu, menu)
+        menu?.findItem(R.id.menu_screen_settings)?.isVisible =
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+        menu?.findItem(R.id.dark_theme)?.isVisible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -180,8 +189,57 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
                 }
             true
         }
+        R.id.menu_screen_settings -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                startActivityForResult(Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY), 42)
+            true
+        }
+        R.id.dark_theme -> {
+            chooseThemeDialog()
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
+
+    private fun chooseThemeDialog() {
+        AlertDialog.Builder(this).apply {
+            setTitle("Choose theme")
+            setSingleChoiceItems(arrayOf("Light", "Dark", "System default"), 0) { dialog, which ->
+                when (which) {
+                    0 -> {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                        delegate.applyDayNight()
+                        recreate()
+                        dialog.dismiss()
+                    }
+                    1 -> {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                        delegate.applyDayNight()
+                        recreate()
+                        dialog.dismiss()
+                    }
+                    2 -> {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                        delegate.applyDayNight()
+                        recreate()
+                        dialog.dismiss()
+                    }
+
+                }
+
+            }
+        }.create().show()
+    }
+
+//    override fun onConfigurationChanged(newConfig: Configuration) {
+//        val currentNightMode = newConfig.uiMode and Configuration.UI_MODE_NIGHT_MASK
+//        when (currentNightMode) {
+//            Configuration.UI_MODE_NIGHT_NO -> {
+//            }  // Установлена светлая тема
+//            Configuration.UI_MODE_NIGHT_YES -> {
+//            } // Установлена тёмная тема
+//        }
+//    }
 
     companion object {
         private const val BOTTOM_SHEET_FRAGMENT_DIALOG_TAG =

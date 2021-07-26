@@ -81,6 +81,8 @@ dependencies {
 
     //google
     implementation GooglePlay.googlePlayCore
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
 
     //Test
     testImplementation TestImpl.junit

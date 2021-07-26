@@ -18,6 +18,7 @@ import com.mas.model.DataModel
 import com.mas.repository.Repository
 import com.mas.repository.RepositoryLocal
 import kotlinx.coroutines.launch
+import org.koin.android.scope.currentScope
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class HistoryActivity : BaseActivity<AppState, HistoryInteractor>() {
@@ -51,7 +52,7 @@ class HistoryActivity : BaseActivity<AppState, HistoryInteractor>() {
             throw IllegalStateException("The ViewModel should be initialised first")
         }
         injectDependencies()
-        val viewModel: HistoryViewModel by viewModel()
+        val viewModel: HistoryViewModel by currentScope.inject()
         model = viewModel
         model.subscribe()
             .observe(this@HistoryActivity, Observer<AppState> { renderData(it) })

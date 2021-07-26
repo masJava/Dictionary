@@ -4,7 +4,7 @@ object Config {
     const val application_id = "com.mas.dictionary"
     const val compile_sdk = 30
     const val min_sdk = 21
-    const val target_sdk = 29
+    const val target_sdk = 30
     val java_version = JavaVersion.VERSION_1_8
 }
 
@@ -27,8 +27,8 @@ object Versions {
     const val multidex = "1.0.3"
 
     // Design
-    const val appcompat = "1.1.0-rc01"
-    const val material = "1.0.0"
+    const val appcompat = "1.3.1"
+    const val material = "1.4.0"
     const val constraint = "2.0.4"
 
     // Kotlin
